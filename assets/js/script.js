@@ -1,12 +1,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize variables
-    const API_KEY = "AIzaSyBYwiFJQL6hVrTdgEBD0uNxgfQm7DLOO78";
-    const MODEL_NAME = "gemini-1.5-flash";
+    const API_KEY = "AIzaSyCQJ_TmDt3If3XGT2Wnr8EFGfRsVjMHzz8";
+    let genAI, model;
     
     // Initialize Google Generative AI
-    const genAI = new GoogleGenerativeAI(API_KEY);
-    const model = genAI.getGenerativeModel({ model: MODEL_NAME });
-    
+    async function initializeAI() {
+        try {
+            // Load the Google Generative AI library
+            const { GoogleGenerativeAI } = await import("https://esm.run/@google/generative-ai");
+            genAI = new GoogleGenerativeAI(API_KEY);
+            model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            console.log("AI model initialized successfully");
+            return true;
+        } catch (error) {
+            console.error("Error initializing AI:", error);
+            return false;
+        }
+    }
+
+    // Initialize AI when page loads
+    initializeAI().then(success => {
+        if (!success) {
+            alert("Failed to initialize AI. Please check console for errors.");
+        }
+    });
+
     // DOM elements
     const analyzeBtn = document.getElementById('analyze-btn');
     const generatePlanBtn = document.getElementById('generate-plan-btn');
@@ -52,6 +70,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const loadingId = addLoadingIndicator();
         
         try {
+            // Check if model is initialized
+            if (!model) {
+                const initialized = await initializeAI();
+                if (!initialized) {
+                    throw new Error("AI model not initialized");
+                }
+            }
+            
             // Generate AI response
             const result = await model.generateContent(message);
             const response = await result.response;
@@ -80,6 +106,14 @@ document.addEventListener('DOMContentLoaded', function() {
         analyzeBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analyzing...';
         
         try {
+            // Check if model is initialized
+            if (!model) {
+                const initialized = await initializeAI();
+                if (!initialized) {
+                    throw new Error("AI model not initialized");
+                }
+            }
+            
             // Generate PMF Analysis
             const pmfPrompt = `Generate a Product-Market Fit (PMF) analysis for a business in the ${industry} industry targeting ${audience} in ${region}. Include sections for Market Demand, Consumer Behavior, and Competitive Landscape. Format the response in markdown with clear headings and bullet points.`;
             const pmfResult = await model.generateContent(pmfPrompt);
@@ -132,6 +166,14 @@ document.addEventListener('DOMContentLoaded', function() {
         generatePlanBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...';
         
         try {
+            // Check if model is initialized
+            if (!model) {
+                const initialized = await initializeAI();
+                if (!initialized) {
+                    throw new Error("AI model not initialized");
+                }
+            }
+            
             // Generate business plan
             const planPrompt = `Create a comprehensive business plan for a ${industry} business targeting ${audience} in ${region}. The business model is ${businessModel}, product offering is ${productOffering}, competitive edge is ${competitiveEdge}, and marketing approach is ${marketingApproach}. 
             
@@ -192,6 +234,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const loadingId = addLoadingIndicator();
         
         try {
+            // Check if model is initialized
+            if (!model) {
+                const initialized = await initializeAI();
+                if (!initialized) {
+                    throw new Error("AI model not initialized");
+                }
+            }
+            
             // Generate AI response
             const result = await model.generateContent(initialMessage);
             const response = await result.response;
