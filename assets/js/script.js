@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize variables
-    const API_KEY = "AIzaSyCQJ_TmDt3If3XGT2Wnr8EFGfRsVjMHzz8";
+    const API_KEY = "AIzaSyBYwiFJQL6hVrTdgEBD0uNxgfQm7DLOO78";
     const MODEL_NAME = "gemini-1.5-flash";
     
     // Initialize Google Generative AI
